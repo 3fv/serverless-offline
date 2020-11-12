@@ -1,6 +1,6 @@
 {
   "dedicatedTo": "Blue, a great migrating bird.",
-  "name": "serverless-offline",
+  "name": "@3fv/serverless-offline",
   "version": "6.8.0",
   "description": "Emulate AWS λ and API Gateway locally when developing your Serverless project",
   "license": "MIT",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dherault/serverless-offline.git"
+    "url": "git+ssh://github.com/3fv/serverless-offline.git"
   },
   "bugs": {
     "url": "https://github.com/dherault/serverless-offline/issues"
