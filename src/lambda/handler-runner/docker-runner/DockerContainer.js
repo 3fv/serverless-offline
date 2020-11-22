@@ -8,6 +8,7 @@ import jszip from 'jszip'
 import { createWriteStream, unlinkSync } from 'fs'
 import { readFile, writeFile, ensureDir, pathExists } from 'fs-extra'
 import { dirname, join, sep } from 'path'
+import * as Path from 'path'
 import crypto from 'crypto'
 import DockerImage from './DockerImage.js'
 import DockerPort from './DockerPort.js'
@@ -77,7 +78,7 @@ export default class DockerContainer {
     // https://github.com/serverless/serverless/blob/v1.57.0/lib/plugins/aws/invokeLocal/index.js#L291-L293
     const dockerArgs = [
       '-v',
-      `${codeDir}:/var/task:${permissions},delegated`,
+      `${Path.resolve(codeDir)}:/var/task:${permissions},delegated`,
       '-p',
       `${port}:9001`,
       '-e',
@@ -92,7 +93,7 @@ export default class DockerContainer {
         `Override layer dir does not exist: ${layerDir}`,
       )
       logLayers(`Found layer override dir: ${layerDir}`)
-      dockerArgs.push('-v', `${layerDir}:/opt:ro,delegated`)
+      dockerArgs.push('-v', `${Path.resolve(layerDir)}:/opt:ro,delegated`)
     } else if (this.#layers.length > 0) {
       logLayers(`Found layers, checking provider type`)
 
