@@ -110,4 +110,8 @@ export default {
     usage:
       'Forces docker to use a mapped host directory instead of package artifact of named handler, incredibly useful for debugging',
   },
+  overrideEnvFile: {
+    usage:
+      'Override env vars with a local file, only json files with .json extension work currently',
+  },
 }

@@ -10,6 +10,7 @@ import { readFile, writeFile, ensureDir, pathExists } from 'fs-extra'
 import { dirname, join, sep } from 'path'
 import * as Path from 'path'
 import crypto from 'crypto'
+import { test } from 'shelljs'
 import DockerImage from './DockerImage.js'
 import DockerPort from './DockerPort.js'
 import debugLog from '../../../debugLog.js'
@@ -85,6 +86,17 @@ export default class DockerContainer {
       'DOCKER_LAMBDA_STAY_OPEN=1', // API mode
       `--name=aws-serverless-offline-${Date.now()}`, // Add a generated name to make debugging that much easier
     ]
+
+    const awsHomeDir = Path.join(process.env.HOME, '.aws')
+    const awsConfigFile = Path.join(awsHomeDir, 'config')
+    const awsCredFile = Path.join(awsHomeDir, 'credentials')
+    if (test('-e', awsConfigFile) && test('-e', awsCredFile)) {
+      dockerArgs.push('-v', `${awsConfigFile}:/var/aws-config`)
+      dockerArgs.push('-v', `${awsCredFile}:/var/aws-credentials`)
+      dockerArgs.push('-e', `AWS_CONFIG_FILE=/var/aws-config`)
+      dockerArgs.push('-e', `AWS_SHARED_CREDENTIALS_FILE=/var/aws-credentials`)
+      dockerArgs.push('-e', `AWS_SDK_LOAD_CONFIG=1`)
+    }
 
     if (this.#overrideLayersDir) {
       const layerDir = this.#overrideLayersDir
