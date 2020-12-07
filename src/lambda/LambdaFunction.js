@@ -39,6 +39,7 @@ export default class LambdaFunction {
   #timeout = null
   #overrideCodeDir = null
   #overrideEnvFile = null
+  #overrideEnv = null
 
   status = 'IDLE' // can be 'BUSY' or 'IDLE'
 
@@ -83,6 +84,8 @@ export default class LambdaFunction {
     const overrideCodeDir = (this.#overrideCodeDir = options.overrideCodeDir)
     // eslint-disable-next-line no-multi-assign
     const overrideEnvFile = (this.#overrideEnvFile = options.overrideEnvFile)
+    // eslint-disable-next-line no-multi-assign
+    const overrideEnv = (this.#overrideEnv = options.overrideEnv || {})
 
     this._verifySupportedRuntime()
 
@@ -91,6 +94,7 @@ export default class LambdaFunction {
       functionDefinition.environment,
       // eslint-disable-next-line global-require,no-extra-boolean-cast,import/no-dynamic-require
       !!overrideEnvFile ? require(overrideEnvFile) : {},
+      overrideEnv,
       handler,
     )
 
@@ -194,11 +198,18 @@ export default class LambdaFunction {
     }
   }
 
-  _getEnv(providerEnv, functionDefinitionEnv, overrideEnv, handler) {
+  _getEnv(
+    providerEnv,
+    functionDefinitionEnv,
+    overrideEnvFromFile,
+    overrideEnv,
+    handler,
+  ) {
     return {
       ...this._getAwsEnvVars(),
       ...providerEnv,
       ...functionDefinitionEnv,
+      ...overrideEnvFromFile,
       ...overrideEnv,
       _HANDLER: handler, // TODO is this available in AWS?
       IS_OFFLINE: true,

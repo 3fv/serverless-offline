@@ -114,4 +114,8 @@ export default {
     usage:
       'Override env vars with a local file, only json files with .json extension work currently',
   },
+  overrideEnv: {
+    usage:
+      'Override env vars with a local file, only json files with .json extension work currently',
+  },
 }

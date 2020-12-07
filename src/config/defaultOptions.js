@@ -31,4 +31,6 @@ export default {
   allowCache: false,
   overrideCodeDir: null,
   overrideLayerDir: null,
+  overrideEnvFile: null,
+  overrideEnv: null,
 }
